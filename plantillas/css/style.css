@@ -1,0 +1,95 @@
+body{
+	font-family: 'Montserrat', 'Arial';
+	margin:0!important;
+}
+svg{
+	box-sizing: border-box;
+}
+div{
+	box-sizing: border-box;
+}
+button{
+	border-radius: 50px;
+	border:none;
+	background-color: #000;
+	color:white;
+	padding: 8px 30px;
+	cursor: pointer;
+}
+input{
+	height:45px;
+	border-radius:50px;
+	border:none;
+}
+
+/******************* PORTADA ****************/
+#cover{
+	background-color: #ECF0F3;
+}
+#bAccess{
+	top: 30px;
+	right: 30px;
+}
+#cover svg{
+	width:30px;
+}
+#searchIcon{
+	transform: translateX(-140%);
+	padding:4px;
+	fill:gray;
+	cursor: pointer;
+}
+#searchBar{
+	padding: 8px 30px;
+	font-size:16px;
+}
+#bottomOptions{
+	font-weight:bold;
+}
+#allUser{
+	color: gray;
+	fill:gray;
+	cursor: pointer;
+}
+#avaiUser{
+	color: green;
+	fill:green;
+	cursor: pointer;
+}
+
+/************** PAGINA USUARIO **************/
+#header{
+	height:85px;
+	background-color: #ECF0F3;
+}
+#bAccessHeader{
+	margin-left:auto;
+}
+#logoHeader{
+	height: 50px;
+}
+#cvSection, #dataSection, #personalSection{
+	padding:50px 30px;
+}
+#contentStudent{
+	height: calc(100% - 85px);
+}
+.titleData{
+	font-weight:bold;
+}
+#imageProfile{
+	border-radius:50%;
+}
+
+#infoName{
+	font-size: 30px;
+    font-weight: bold;
+}
+
+#infoSurname{
+	font-size: 20px;
+}
+
+#infoAvai{
+	
+}
