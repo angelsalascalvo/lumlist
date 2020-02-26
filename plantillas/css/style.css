@@ -21,7 +21,18 @@ input{
 a{
 	text-decoration: none;
 }
-
+input[type="file"]{
+	border:none!important;
+}
+textarea{
+	border-radius: 6px;
+	padding: 6px;
+	font-family: 'Montserrat', 'Arial';
+	height: 70px;
+}
+.red{
+	background-color: rgb(218, 22, 22);
+}
 /******************* PORTADA ****************/
 #cover{
 	background-color: #ECF0F3;
@@ -147,11 +158,6 @@ a{
 	left: 0;
 }
 
-#sidebarSearch input[type=checkbox]{
-	border:none!important;
-	width: 18px;
-	border-radius: 10px;
-}
 #searchbarSide svg{
 	height: 30px;
     padding: 8px;
@@ -165,7 +171,7 @@ a{
 	padding-left: 10px;
 }
 
-/* Customize the label (the containerCheck) */
+/* Customize the label (the containerRadioCheck) */
 .containerCheck {
 	display: block;
 	position: relative;
@@ -240,7 +246,7 @@ a{
   }
 
   .elementFind{
-	  padding: 18px;
+	padding: 18px;
   }
 
   .elementFind img{
@@ -253,4 +259,182 @@ a{
 
   .elementFind #infoSurname{
 	font-size: 16px!important;
+  }
+
+  .studiesElement span{
+	background-color: #c3c3c3;
+    border-radius: 50px;
+    padding: 3px 13px;
+    font-size: 14px;
+  }
+
+  /*********** PAGINA EDITAR ALUMNO ************/
+  
+  #contentEditStudent input{
+	  border: 1px solid gray;
+	  padding: 4px 10px;
+	  height: 30px;
+  }
+
+
+
+  /* Customize the label (the containerRadio) */
+.containerRadio {
+	display: block;
+	position: relative;
+	padding-left: 25px;
+	margin-bottom: 6px;
+	cursor: pointer;
+	font-size: 15px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+  }
+  
+  /* Hide the browser's default radio button */
+  .containerRadio input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+  }
+  
+  /* Create a custom radio button */
+  .checkmarkRadio {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 18px;
+	width: 18px;
+	background-color: #eee;
+	border-radius: 50%;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .containerRadio:hover input ~ .checkmarkRadio {
+	background-color: #ccc;
+  }
+  
+  /* When the radio button is checked, add a blue background */
+  .containerRadio input:checked ~ .checkmarkRadio {
+	background-color: #2196F3;
+  }
+  
+  /* Create the indicator (the dot/circle - hidden when not checked) */
+  .checkmarkRadio:after {
+	content: "";
+	position: absolute;
+	display: none;
+  }
+  
+  /* Show the indicator (dot/circle) when checked */
+  .containerRadio input:checked ~ .checkmarkRadio:after {
+	display: block;
+  }
+  
+  /* Style the indicator (dot/circle) */
+  .containerRadio .checkmarkRadio:after {
+	top: 4px;
+    left: 4px;
+    width: 10px;
+    height: 10px;
+	border-radius: 50%;
+	background: white;
+  }
+  
+
+  #infoEditCont img{
+	  border-radius: 50%;
+  }
+
+  #titleEdit{
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+	padding-top: 25px;
+  }
+
+  #editPhoto{
+	cursor: pointer;
+  }
+
+  #editIcon{
+	  width: 20px;
+  }
+
+  /******* PAGINA DE LOGIN *********/
+
+  #fieldsLogin button, #fieldsLogin input{
+	  height: 35px;
+  }
+
+  #fieldsLogin input{
+	  padding: 4px 15px;
+  }
+
+ /********** PAGINA DE OPCIONES ADMIN ***********/
+
+  #optionsAdmin div{
+	border-radius: 20px;
+	font-weight: bold;
+	height: 75px;
+	margin-bottom: 20px; 
+	background-color: #ECF0F3;
+	cursor: pointer;
+  }
+
+  #optionsAdmin svg{
+	  width: 28px;
+  }
+
+  /******* PAGINA NUEVO ALUMNO ********/
+  #newStudentData input{
+	  border: 1px solid gray;
+	  padding: 5px 15px;
+	  height: 30px;
+  }
+
+  /****** PAGINA ADMINISTRAR CURSOS ******/
+  #modal{
+	  background-color: rgba(0, 0, 0, 0.815);
+	  z-index: 10;
+  }
+  #inside{
+	  background-color: white;
+	  z-index: 20;
+	  padding: 35px 5%;
+	  border-radius: 15px
+  }
+  .titModal{
+	  font-size: 18px;
+	  font-weight: bold;
+	  text-align: center;
+  }
+  #inside input{
+	  border: 1px solid gray;
+	  height: 30px;
+	  padding: 5px 15px;
+  }
+  #closeModal{
+	  position: absolute;
+	  top:15px;
+	  right: 15px;
+	  cursor: pointer;
+  }
+  #closeModal svg{
+	width: 20px;
+  }
+  #contentStudies{
+	  padding: 0px 40px;
+  }
+  .studyElement:nth-child(odd){
+    background:#ECF0F3;
+  }
+  .studyElement{
+	  padding: 15px;
+  }
+  .studyElement .bEdit{
+	margin-left: auto;
   }
