@@ -78,7 +78,7 @@ textarea{
 	margin-left:auto;
 }
 #logoHeader{
-	height: 50px;
+	height: 40px;
 }
 #cvSection, #dataSection, #personalSection{
 	padding:50px 30px;
@@ -430,11 +430,35 @@ textarea{
 	  padding: 0px 40px;
   }
   .studyElement:nth-child(odd){
-    background:#ECF0F3;
+	border-top:none;
+	border-bottom:none; 
+  }
+  .studyElement:last-child{
+	  border-bottom:1px solid gray;
+  }
+  .studyElement:first-child{
+	border-top:1px solid gray;
   }
   .studyElement{
 	  padding: 15px;
+	  border-top:1px solid gray;
+	  border-bottom:1px solid gray;
   }
   .studyElement .bEdit{
 	margin-left: auto;
+  }
+  #bAddStudy{
+	  bottom: 35px;
+	  right: 35px;
+  }
+  #bAddStudy button{
+	  width: 60px;
+	  height: 60px;
+	  border-radius: 50%;
+	  padding: 0;
+	  background:black;
+  }
+  #bAddStudy svg{
+	width: 25px;
+	fill: white;
   }
