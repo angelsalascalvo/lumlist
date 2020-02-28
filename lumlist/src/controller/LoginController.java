@@ -7,6 +7,8 @@ package controller;
 
 import dao.AdminDao;
 import dao.DbConnection;
+import dao.StudentDao;
+
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Admin;
+import model.Student;
 
 /**
  *
@@ -30,39 +33,52 @@ public class LoginController extends HttpServlet {
         rd.forward(req, resp);
     }
    
+    /**
+     * METODO PARA COMPROBAR SI UN USUARIO Y CONTRASEÑA CORRESPONDEN CON ALGUN
+     * ADMINISTRADOR O ALUMNO DE LA BASE DE DATOS
+     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse response)
             throws ServletException, IOException {
+    	
+    	DbConnection conn = new DbConnection();
+    	RequestDispatcher rd;
         
         // Recibimos parametros del formulario de login
-        String userParam = request.getParameter("user");
-        String passParam = request.getParameter("pwd");
-        String msg = "";
+        String userParam = req.getParameter("user");
+        String passParam = req.getParameter("pwd");
+        
         // Recuperamos una instancia del objeto HttpSession
-        HttpSession session = request.getSession();
+        HttpSession session = req.getSession();
+        
+        // 1. Comprobar si es un administrador    
+        AdminDao adminDao = new AdminDao(conn);
+        Admin admin = adminDao.login(userParam, passParam);
 
-        DbConnection conn = new DbConnection();
-        AdminDao usuarioDao = new AdminDao(conn);
-       /* // Verificamos en la BD, si es un usuario correcto.
-        Admin admin = usuarioDao.login(userParam, passParam);
-        conn.disconnect();
-
-        RequestDispatcher rd;
         if (admin.getId() > -1) {
-            System.out.println("ok");
-            /*
-            session.setAttribute("usuario", admin);
-            rd = request.getRequestDispatcher("/admin.jsp");
-            rd.forward(request, response);*/
-/*
+            session.setAttribute("user", admin);
+            conn.disconnect();
+            req.setAttribute("admin", admin);
+            rd = req.getRequestDispatcher("/options.jsp");
+            rd.forward(req, response);
+            
+        // 2. Comprobar si es un alumno
         } else {
-            System.out.println("noOk");
-            /*msg = "Usuario y/o password incorrectos";
-            request.setAttribute("message", msg);
-            rd = request.getRequestDispatcher("/login.jsp");
-            rd.forward(request, response);*/
-     /*   }*/
+        	StudentDao studentDao = new StudentDao(conn);
+        	Student student = studentDao.login(userParam, passParam);
+            conn.disconnect();
+
+        	if (student.getId() > -1) {
+                session.setAttribute("user", student);
+                //rd = request.getRequestDispatcher("/admin.jsp");
+                //rd.forward(request, response);
+                
+            // Indicar error de login
+            } else {
+            	req.setAttribute("error", "Usuario o contraseña incorrecta");
+                rd = req.getRequestDispatcher("/login.jsp");
+                rd.forward(req, response);
+            }
+        }
     }
-    
-    
 }

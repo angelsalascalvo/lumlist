@@ -35,7 +35,7 @@ textarea{
 	height: 70px;
 }
 .red{
-	background-color: rgb(218, 22, 22);
+	background-color: rgb(218, 22, 22)!important;
 }
 /******************* PORTADA ****************/
 #cover{
@@ -376,6 +376,12 @@ textarea{
 
   #fieldsLogin input{
 	  padding: 4px 15px;
+  }
+  
+  .errorText{
+  	color:red;
+  	text-align:center;
+  	font-size: 14px;
   }
 
  /********** PAGINA DE OPCIONES ADMIN ***********/

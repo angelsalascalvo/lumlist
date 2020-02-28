@@ -24,6 +24,7 @@ public class Admin {
     }
 
     public Admin() {
+    	this.id=-1;
     }
 
     /*

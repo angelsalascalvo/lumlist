@@ -5,7 +5,7 @@
  */
 package model;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  *
@@ -44,7 +44,14 @@ public class Student {
         this.github = github;
     }
 
-    /*
+    /**
+     * CONSTRUCTOR POR DEFECTO
+     */
+    public Student() {
+    	this.id=-1;
+	}
+
+	/*
     * METODOS GET Y SET
     */
     public int getId() {

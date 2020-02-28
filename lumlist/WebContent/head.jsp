@@ -1,9 +1,3 @@
-<%-- 
-    Document   : head
-    Created on : 27-feb-2020, 12:11:20
-    Author     : rutil
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <head>

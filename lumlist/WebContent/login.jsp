@@ -1,9 +1,3 @@
-<%-- 
-    Document   : login
-    Created on : 27-feb-2020, 12:09:34
-    Author     : rutil
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -19,7 +13,9 @@
                         <form method="post" action="login">
                             <input class="col100" type="text" placeholder="Usuario" name="user">
                             <input class="col100 sMarginTop" type="password" placeholder="Contraseña" name="pwd">
-                            <button class="col100 lMarginTop" type="submit">Acceder</button>
+                            <p class="errorText col100 sMarginTop">${error}</p>
+                            <button class="col100 sMarginTop" type="submit">Acceder</button>
+                            
                         </form>
                     </div>        
                 </div>

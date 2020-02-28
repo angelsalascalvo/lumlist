@@ -29,7 +29,8 @@ public class AdminDao {
     public Admin login(String user, String pass) {
 
         try {
-            String sql = "select * from admin where username=? and password = ? limit 1";
+        	//Consulta SQL
+            String sql = "select * from admin where username=? and passwd = ? limit 1";
             PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, user);
             preparedStatement.setString(2, pass);
@@ -37,12 +38,13 @@ public class AdminDao {
             Admin admin = new Admin();
             //Leer el resultado
             while (rs.next()) {
-                // Crear objeto de tipo administrador
+                // Rellenar el objeto de tipo administrador
                 admin.setId(rs.getInt("id"));
                 admin.setUsername(rs.getString("username"));
                 admin.setPasswd(rs.getString("passwd"));
             }
             return admin;
+            
         } catch (SQLException e) {
             System.out.println("Error UsuarioDao.login: " + e.getMessage());
             return null;
