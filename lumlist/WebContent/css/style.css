@@ -233,7 +233,7 @@ textarea{
   
   /* When the checkbox is checked, add a blue background */
   .containerCheck input:checked ~ .checkmark {
-	background-color: rgb(32, 158, 0);
+	background-color: #0a9749;
   }
   
   /* Create the checkmark/indicator (hidden when not checked) */
@@ -341,7 +341,7 @@ textarea{
   
   /* When the radio button is checked, add a blue background */
   .containerRadio input:checked ~ .checkmarkRadio {
-	background-color: #2196F3;
+	background-color: #0a9749;
   }
   
   /* Create the indicator (the dot/circle - hidden when not checked) */

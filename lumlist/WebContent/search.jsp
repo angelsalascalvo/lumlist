@@ -179,7 +179,7 @@
    		$( ".elementFind" ).each(function(index) {
    			cont++;
    		  	if(cont==7){
-   		  		cont=0;
+   		  		cont=1;
    		  		$(this).css("clear", "both");
    		  	}
    		});

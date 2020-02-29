@@ -233,14 +233,14 @@ public class StudentController extends HttpServlet {
 					 
 					 //Enlace github
 					 String sGithub;
-					 if(req.getParameter("linkedin").length()==0)
+					 if(req.getParameter("github").length()==0)
 						 sGithub = null;
 					 else
 						 sGithub = req.getParameter("github");
 					 
 					//Observaciones
 					 String sObservations;
-					 if(req.getParameter("linkedin").length()==0)
+					 if(req.getParameter("observations").length()==0)
 						 sObservations = null;
 					 else
 						 sObservations = req.getParameter("observations");		 
