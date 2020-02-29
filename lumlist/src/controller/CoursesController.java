@@ -29,6 +29,14 @@ public class CoursesController extends HttpServlet {
         System.out.println(list.size());
         
         conn.disconnect();
+        
+        /// Enviar informacion sobre logueo ///
+		if(session.getAttribute("admin") != null)
+			req.setAttribute("user", "admin");
+		else if(session.getAttribute("student") != null)
+			req.setAttribute("user", "student");
+		//////////////////////////////////
+        
         //Mostrar la vista 
 		rd = req.getRequestDispatcher("/courses.jsp");
         rd.forward(req, resp);

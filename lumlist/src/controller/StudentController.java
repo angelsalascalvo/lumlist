@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -27,6 +28,7 @@ import javax.servlet.http.Part;
 
 import dao.CourseDao;
 import dao.DbConnection;
+import dao.StudentCourseDao;
 import dao.StudentDao;
 import model.Course;
 import model.Student;
@@ -48,9 +50,17 @@ public class StudentController extends HttpServlet {
 		//En funcion de la accion actuaremos
 		switch(action) {
 			case "add":
+				/// Enviar informacion sobre logueo ///
+				if(session.getAttribute("admin") != null)
+					req.setAttribute("user", "admin");
+				else if(session.getAttribute("student") != null)
+					req.setAttribute("user", "student");
+				//////////////////////////////////
+				
 				rd = req.getRequestDispatcher("/addstudent.jsp");
 		        rd.forward(req, resp);
 				break;
+				
 			case "show":
 				int id = Integer.parseInt(req.getParameter("id"));
 				//Obtener datos del alumno
@@ -86,7 +96,32 @@ public class StudentController extends HttpServlet {
 					else
 						req.setAttribute("existCurri", false);
 					
+					//Obtener todos los cursos
+			        CourseDao courseDao = new CourseDao(conn);
+			        List<Course> allCourses= courseDao.getAll(); 
+					
+					//Obtener los cursos asociados con el alumno
+			        StudentCourseDao scDao = new StudentCourseDao(conn);
+			        List<Integer> sc = scDao.getCoursesStudent(id); 
+					
+			        //Obtener objetos de tipo curso asociados al alumno
+			        List<Course> courses = new LinkedList<>();
+			        for(int i=0; i<sc.size(); i++) {
+			        	for(int j=0; j<allCourses.size(); j++) {
+			        		if(sc.get(i)==allCourses.get(j).getId())
+			        			courses.add(allCourses.get(j));
+			        	}
+			        }
+			        
+			        /// Enviar informacion sobre logueo ///
+					if(session.getAttribute("admin") != null)
+						req.setAttribute("user", "admin");
+					else if(session.getAttribute("student") != null)
+						req.setAttribute("user", "student");
+					//////////////////////////////////
+			        
 					req.setAttribute("student", student);
+					req.setAttribute("courses", courses);
 					rd = req.getRequestDispatcher("/student.jsp");
 			        rd.forward(req, resp);
 				}
@@ -102,10 +137,31 @@ public class StudentController extends HttpServlet {
 		        CourseDao courseDao = new CourseDao(conn);
 		        List<Course> courses= courseDao.getAll(); 
 		        
+		        //Obtener los cursos asociados con el alumno
+		        StudentCourseDao scDao = new StudentCourseDao(conn);
+		        List<Integer> studentCourses= scDao.getCoursesStudent(idEdit); 
+		        
+		        //Comprobar si existe una foto para el usuario e indicarlo a la vista
+				String path = req.getServletContext().getRealPath("")+"uploads"; 
+				File photo = new File(path+"/"+idEdit+".jpg");
+				if(photo.exists())
+					req.setAttribute("existPhoto", true);
+				else
+					req.setAttribute("existPhoto", false);
+		        
 		        //Comprobar si se ha encontrado el usuario indicado
 				if(studentEdit.getId()>-1) {
 					req.setAttribute("student", studentEdit);
 					req.setAttribute("courses", courses);
+					req.setAttribute("studentCourses", studentCourses);
+					
+					/// Enviar informacion sobre logueo ///
+					if(session.getAttribute("admin") != null)
+						req.setAttribute("user", "admin");
+					else if(session.getAttribute("student") != null)
+						req.setAttribute("user", "student");
+					//////////////////////////////////
+					
 					rd = req.getRequestDispatcher("/editstudent.jsp");
 		        	rd.forward(req, resp);
 				}
@@ -172,14 +228,24 @@ public class StudentController extends HttpServlet {
 				 if(req.getParameter("status").equals("false")) {
 					 sAvailable = false;
 				 }
-				 
-				 System.out.println(req.getParameter("status"));
-				  
+				 			  
 				 
 				 //Llamada al metodo de actualizar
 				 DbConnection conn = new DbConnection();
 				 StudentDao studentDao = new StudentDao(conn);
 				 studentDao.update(sId, sName, sSurname, sEmail, sPhone, sLinkedin, sGithub, sObservations, sBirth, sAvailable);
+				 
+				 //Obtener cursos seleccionados y actualizar tabla intermedia
+				 StudentCourseDao scDao = new StudentCourseDao(conn);			 
+				 scDao.removeAllStudent(sId); //Eliminar las asociaciones para realizar las nuevas
+				 
+				 if( req.getParameterValues("selected")!=null) {
+					 String checks[] = req.getParameterValues("selected");
+				 	 //Insertar asociaciones marcadas
+					 for(int i=0;i<checks.length;i++) {
+						 scDao.add(sId, Integer.parseInt(checks[i]));
+					 }
+				 }
 				 
 				 //Rutas
 				 String path = req.getServletContext().getRealPath("")+"uploads"; 
@@ -230,8 +296,9 @@ public class StudentController extends HttpServlet {
 				 //Llamada al metodo de insertar
 				 DbConnection connInsert = new DbConnection();
 				 StudentDao studentDaoInsert = new StudentDao(connInsert);
-				 studentDaoInsert.add(sNameAdd, sSurnameAdd, sUsernameAdd, sPasswdAdd);
+				 int newId = studentDaoInsert.add(sNameAdd, sSurnameAdd, sUsernameAdd, sPasswdAdd);
 				 
+				 resp.sendRedirect(req.getContextPath() + "/student?action=show&id="+newId);
 				break;
 		}
 	}

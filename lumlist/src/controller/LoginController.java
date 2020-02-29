@@ -29,8 +29,28 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher rd = req.getRequestDispatcher("/login.jsp");
-        rd.forward(req, resp);
+        String action = req.getParameter("action");
+		HttpSession session = req.getSession();
+		RequestDispatcher rd;
+		DbConnection conn = new DbConnection();
+		
+		if(req.getParameter("action")==null) {
+			 //Comprobar si esta registrado
+			 if (session.getAttribute("admin") != null || session.getAttribute("student")!=null) {
+				 resp.sendRedirect(req.getContextPath() + "/index");
+			 }else {
+				 rd = req.getRequestDispatcher("/login.jsp");
+				 rd.forward(req, resp);    
+			 }
+		}else {
+			//En funcion de la accion actuaremos
+			switch(action) {
+				case "logout":
+					session.invalidate();
+					resp.sendRedirect(req.getContextPath() + "/index");
+					break;
+			}
+		}
     }
    
     /**
@@ -38,7 +58,7 @@ public class LoginController extends HttpServlet {
      * ADMINISTRADOR O ALUMNO DE LA BASE DE DATOS
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
     	
     	DbConnection conn = new DbConnection();
@@ -56,11 +76,11 @@ public class LoginController extends HttpServlet {
         Admin admin = adminDao.login(userParam, passParam);
 
         if (admin.getId() > -1) {
-            session.setAttribute("user", admin);
+            session.setAttribute("admin", admin);
             conn.disconnect();
             req.setAttribute("admin", admin);
-            rd = req.getRequestDispatcher("/options.jsp");
-            rd.forward(req, response);
+            
+            resp.sendRedirect(req.getContextPath() + "?action=options");
             
         // 2. Comprobar si es un alumno
         } else {
@@ -69,15 +89,14 @@ public class LoginController extends HttpServlet {
             conn.disconnect();
 
         	if (student.getId() > -1) {
-                session.setAttribute("user", student);
-                //rd = request.getRequestDispatcher("/admin.jsp");
-                //rd.forward(request, response);
+        		session.setAttribute("student", student);
+        		resp.sendRedirect(req.getContextPath() + "/student?action=show&id="+student.getId());
                 
             // Indicar error de login
             } else {
             	req.setAttribute("error", "Usuario o contraseña incorrecta");
                 rd = req.getRequestDispatcher("/login.jsp");
-                rd.forward(req, response);
+                rd.forward(req, resp);
             }
         }
     }

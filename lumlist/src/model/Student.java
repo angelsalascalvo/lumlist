@@ -6,6 +6,7 @@
 package model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -24,6 +25,8 @@ public class Student {
     private String observations;
     private String linkedin;
     private String github;
+    private List<String> coursesNames;
+    private boolean hasPhoto;
 
     /*
      * CONSTRUCTOR PARAMETRIZADO
@@ -149,4 +152,24 @@ public class Student {
     public void setGithub(String github) {
         this.github = github;
     }
+
+	public List<String> getCoursesNames() {
+		return coursesNames;
+	}
+
+	public void setCoursesNames(List<String> coursesNames) {
+		this.coursesNames = coursesNames;
+	}
+
+	public boolean isHasPhoto() {
+		return hasPhoto;
+	}
+
+	public void setHasPhoto(boolean hasPhoto) {
+		this.hasPhoto = hasPhoto;
+	}
+
+	
+	
+    
 }

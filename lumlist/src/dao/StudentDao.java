@@ -9,6 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import model.Course;
 import model.Student;
 
 /**
@@ -126,7 +130,7 @@ public class StudentDao {
 	    
 	    //----------------------------------------------------------------------------
 	    
-	    public void add(String name, String surname, String username, String passwd) {
+	    public int add(String name, String surname, String username, String passwd) {
 	    	try {
 	    		 String sql = "insert into students (name, surname, username, passwd, birth_date, available, phone, email) values (?,?,?,?,?,?,?,?)";
 		    	 PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
@@ -142,9 +146,105 @@ public class StudentDao {
 		         //Ejecutar inserccion
 		         preparedStatement.executeUpdate();
 		         preparedStatement.close();
+		         
+		         //Obtener id insertado
+		         String sql2 = "select id from students order by id desc limit 1";
+	             PreparedStatement preparedStatement2 = conn.getConnection().prepareStatement(sql2);
+	             ResultSet rs2 = preparedStatement2.executeQuery();
+	             int num=-1;
+	             while (rs2.next()) {
+	            	num=rs2.getInt("id");
+            	 }
+	             preparedStatement2.close();
+
+		         return num;
 		    } catch (SQLException e) {
 				System.out.println("Error al actualizar " + e.getMessage());
+				return -1;
 			} 
 	         
+	    }
+	    
+	    //------------------------------------------------------------------------------------------
+	    
+	    /**
+	     * METODO PARA BUSCAR USUARIOS A TRAVES DE UNA CLAVE
+	     * @return
+	     */
+	    public List<Student> find(String key){
+	    	 try {
+	             String sql = "select * from students where "+
+	            		 		"name like ? or "+
+	            		 		"surname like ? or "+
+	            		 		"username like ? or "+
+	            		 		"email like ?";
+	             PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
+	             preparedStatement.setString(1, "%"+key+"%");
+	             preparedStatement.setString(2, "%"+key+"%");
+	             preparedStatement.setString(3, "%"+key+"%");
+	             preparedStatement.setString(4, "%"+key+"%");
+	             ResultSet rs = preparedStatement.executeQuery();
+	             List<Student> list = new LinkedList<>();
+	             
+	             while (rs.next()) {
+	            	 Student s = new Student();
+	            	// Rellenar el objeto con los datos
+	            	s.setId(rs.getInt("id"));
+	            	s.setName(rs.getString("name"));
+	            	s.setSurname(rs.getString("surname"));
+	            	s.setUsername(rs.getString("username"));
+	            	s.setPasswd(rs.getString("passwd"));
+	            	s.setBirthDate(rs.getDate("birth_date"));
+	            	s.setAvailable(rs.getBoolean("available"));
+	            	s.setPhone(rs.getInt("phone"));
+	            	s.setEmail(rs.getString("email"));
+            		s.setObservations(rs.getString("observations"));
+            		s.setLinkedin(rs.getString("linkedin"));
+            		s.setGithub(rs.getString("github"));
+	                // Agregar el curso a la lista
+	                list.add(s);
+	             }
+	             return list;
+
+	         } catch (SQLException e) {            
+	             System.out.println("Error: " + e.getMessage());
+	             return null;
+	         }
+	    }
+	    
+	    /**
+	     * METODO PARA BUSCAR USUARIOS A TRAVES DE UNA CLAVE
+	     * @return
+	     */
+	    public List<Student> getAll(){
+	    	 try {
+	             String sql = "select * from students";
+	             PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
+	             ResultSet rs = preparedStatement.executeQuery();
+	             List<Student> list = new LinkedList<>();
+	             while (rs.next()) {
+	            	 Student s = new Student();
+	            	// Rellenar el objeto con los datos
+	            	s.setId(rs.getInt("id"));
+	            	s.setName(rs.getString("name"));
+	            	s.setSurname(rs.getString("surname"));
+	            	s.setUsername(rs.getString("username"));
+	            	s.setPasswd(rs.getString("passwd"));
+	            	s.setBirthDate(rs.getDate("birth_date"));
+	            	s.setAvailable(rs.getBoolean("available"));
+	            	s.setPhone(rs.getInt("phone"));
+	            	s.setEmail(rs.getString("email"));
+            		s.setObservations(rs.getString("observations"));
+            		s.setLinkedin(rs.getString("linkedin"));
+            		s.setGithub(rs.getString("github"));
+	                // Agregar el curso a la lista
+	                list.add(s);
+	             }
+	             return list;
+
+	         } catch (SQLException e) {            
+	             System.out.println("Error: " + e.getMessage());
+	             return null;
+	         }
 	    }
 }

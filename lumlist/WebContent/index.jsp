@@ -1,16 +1,31 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE html>
-<html id="#index">
-    <head>
-        <title>Lumlist</title>
-        <link rel="stylesheet" type="text/css" href="css/global.css">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
+<html>
+    <jsp:include page="head.jsp" />
     <body id="cover">
-        <div id="bAccess" class="absolute">
-            <button>ACCEDER</button>
-        </div>
+    	<!-- Botones en funcion del logueo -->
+    	<c:choose>
+		  	<c:when test="${(user!=null) and (user=='admin')}">
+            	<div id="bAccess" class="absolute">
+				    <a href=".?action=options"><button>OPCIONES</button></a>
+				    <a href="./login?action=logout"><button class="bSecond">CERRAR SESION</button></a>
+				</div>
+		  	</c:when> 
+	  		<c:when test="${(user!=null) and (user=='student')}">
+            	<div id="bAccess" class="absolute">
+				    <button>EDITAR PERFIL</button>
+				    <button class="bSecond">CERRAR SESION</button>
+				</div>
+		  	</c:when>
+		  	<c:otherwise>
+                <div id="bAccess" class="absolute">
+				    <a href="./login"><button>ACCEDER</button></a>
+				</div>
+		  	</c:otherwise>
+		</c:choose>
+    	
         <div class="width100 centerV row100">
             <div id="cover" class="col100">
                 <div class="col100 centerH">
@@ -44,4 +59,41 @@
             </div>
         </div>
     </body>
+    
+    <script>
+    	$( document ).ready(function() {
+		  	//Acciones al buscar con la barra de busqueda
+		  	$('#searchBar').on("keypress",function(e){ 
+					if(e.which == 13) {
+						search();
+				    }
+		  	});
+		  	$("#searchIcon").on("click", function(){ search() });
+			  
+		  	/*
+	  		* METODO QUE PERMITE CONFECCIONAR LA RUTA DE BUSQUEDA EN FUNCION DE LOS PARAMETROS MARCADOS
+	  		*/
+	  		function search(){
+	  			url="./index?action=search";
+	 
+	  			//Agregar clave de busqueda
+	  			if($('#searchBar').val()!=""){
+	  				url+="&key="+encodeURIComponent($("#searchBar").val());
+	  				window.location.href = url;
+	  			}
+	  		}
+		  	
+		  	//---------------------------------------------------------------------------------------
+		  	
+		  	//Mostrar usuarios disponibles
+		  	$("#avaiUser").on("click", function(){
+		  		window.location.href = "./index?action=search&status=true";
+		  	});
+		  	
+		  	//Mostrar todos los usuarios
+		  	$("#allUser").on("click", function(){
+		  		window.location.href = "./index?action=search&key=all";
+		  	});
+    	});
+    </script>
 </html>

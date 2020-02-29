@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import model.Course;
+import model.Student;
 
 public class CourseDao {
 	private DbConnection conn;
@@ -40,6 +41,26 @@ public class CourseDao {
              System.out.println("Error ServidorDao.getAll: " + e.getMessage());
              return null;
          }
+    }
+    
+  //----------------------------------------------------------------------
+    
+    public String getName(int id) {
+    	try {
+            String sql = "select name from courses where id=? limit 1";
+            PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, id); // Set idServidor
+            ResultSet rs = preparedStatement.executeQuery();
+            String name="";
+            while (rs.next()) {
+                // Rellenar el objeto con los datos
+            	name = rs.getString("name");
+        	}
+            return name;
+        } catch (SQLException e) {            
+            System.out.println("Error ServidorDao.getById: " + e.getMessage());
+            return null;
+        }
     }
     
     //-------------------------------------------------------------------------
@@ -99,6 +120,5 @@ public class CourseDao {
 	    } catch (SQLException e) {
 			System.out.println("Error al actualizar " + e.getMessage());
 		} 
-         
     }
 }

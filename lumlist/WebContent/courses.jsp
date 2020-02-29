@@ -1,11 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%
-response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
-response.setHeader("Pragma","no-cache"); //HTTP 1.0
-response.setDateHeader ("Expires", 0);
-//prevents caching at the proxy server
-%>
 
 <!DOCTYPE html>
 <html>
@@ -42,9 +36,18 @@ response.setDateHeader ("Expires", 0);
         <!-- CONTENIDO -->
        <div id="header" class="col100 centerV">
            <img id="logoHeader" class="xlMarginLeft left" src="img/logo.png">
-           <div id="bAccessHeader" class="lMarginRight">
-                <button>ACCEDER</button>
-            </div>
+           <!-- Botones en funcion del logueo -->
+	    	<c:choose>
+			  	<c:when test="${(user!=null) and (user=='admin')}">
+	            	<jsp:include page="menu/admin.jsp" />
+			  	</c:when>
+		  		<c:when test="${(user!=null) and (user=='student')}">
+	            	<jsp:include page="menu/student.jsp" />
+			  	</c:when>
+			  	<c:otherwise>
+	                <jsp:include page="menu/visit.jsp" />
+			  	</c:otherwise>
+			</c:choose>
        </div>
 
        <div id="contentStudies" class="col100">

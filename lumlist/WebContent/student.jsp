@@ -7,24 +7,35 @@
     <body>
        <div id="header" class="col100 centerV">
            <img id="logoHeader" class="xlMarginLeft left" src="img/logo.png">
-           <div id="bAccessHeader" class="lMarginRight">
-                <button>ACCEDER</button>
-            </div>
+          <!-- Botones en funcion del logueo -->
+	    	<c:choose>
+			  	<c:when test="${(user!=null) and (user=='admin')}">
+	            	<jsp:include page="menu/admin.jsp" />
+			  	</c:when>
+		  		<c:when test="${(user!=null) and (user=='student')}">
+	            	<jsp:include page="menu/student.jsp" />
+			  	</c:when>
+			  	<c:otherwise>
+	                <jsp:include page="menu/visit.jsp" />
+			  	</c:otherwise>
+			</c:choose>
        </div>
 
        <div id="contentStudent" class="col100">
             <!-- panel lateral informacion personal -->
             <div id="personalSection" class="col25 row100 centerH">
                 <div class="col65">
-                
-                	<c:choose>
-					  <c:when test="${existPhoto}">
-                       	<img id="imageProfile" class="col100" src="uploads/${student.id}.jpg">
-					  </c:when>
-					  <c:otherwise>
-                       	<img id="imageProfile" class="col100" src="img/generic.jpg">
-					  </c:otherwise>
-					</c:choose>
+                	<div id="photoContainer" class="col100">
+	                	<!-- Asignar fotografia si existe -->
+	                	<c:choose>
+						  <c:when test="${existPhoto}">
+	                       	<img id="imageProfile" class="col100" src="uploads/${student.id}.jpg">
+						  </c:when>
+						  <c:otherwise>
+	                       	<img id="imageProfile" class="col100" src="img/generic.jpg">
+						  </c:otherwise>
+						</c:choose>
+                    </div>
                     
                     <span id="infoName" class="col100 lMarginTop">${student.name}</span>
                     <span id="infoSurname" class="col100">${student.surname}</span>
@@ -37,6 +48,19 @@
                        	<button id="infoAvai" class="red col100 xlMarginTop">No disponible</button>
 					  </c:otherwise>
 					</c:choose>
+                    
+                    
+                     <!-- Opciones de administrador  -->
+                    <c:choose>
+					  	<c:when test="${user=='admin'}">
+					  		<div class="col100 mMarginTop">
+				            	<a href="./student?action=edit&id=${student.id}"><button class="col100 sMarginTop">Editar Alumno</button></a>
+                    		</div>
+                    		<div class="col100">
+                    			<button id="bRemoveStudent" class="col100 sMarginTop red">Eliminar Alumno</button>
+                    		</div>
+					  	</c:when>
+				  	</c:choose>
                     
                 </div>
             </div>
@@ -52,8 +76,9 @@
                 </span>
                 <span class="titleData col100 lMarginTop">Estudios:</span>
                 <div id="studies" class="col100 mMarginTop contentInfo">
-                    <span>DAM</span>
-                    <span>DAW</span>
+                    <c:forEach items="${courses}" var="course">
+                    	<span>${course.name.toUpperCase()}</span>
+                   	</c:forEach>
                 </div>
 
                 <span class="titleData col100 lMarginTop">Contacto:</span>

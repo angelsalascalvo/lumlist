@@ -1,19 +1,31 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE html>
 <html>
     <jsp:include page="head.jsp" />  
     <body>
        <div id="header" class="col100 centerV">
            <img id="logoHeader" class="xlMarginLeft left" src="img/logo.png">
-           <div id="bAccessHeader" class="lMarginRight">
-                <button>ACCEDER</button>
-            </div>
+           <!-- Botones en funcion del logueo -->
+	    	<c:choose>
+			  	<c:when test="${(user!=null) and (user=='admin')}">
+	            	<jsp:include page="menu/admin.jsp" />
+			  	</c:when>
+		  		<c:when test="${(user!=null) and (user=='student')}">
+	            	<jsp:include page="menu/student.jsp" />
+			  	</c:when>
+			  	<c:otherwise>
+	                <jsp:include page="menu/visit.jsp" />
+			  	</c:otherwise>
+			</c:choose>
        </div>
 
        <div id="contentOptions" class="col100">
             <div id="titleEdit" class="col100">HOLA ${admin.username.toUpperCase()}!</div>
             <div class="col100 centerH xxlMarginTop">
                 <div id="optionsAdmin" class="col50">
+                	<a href="./courses">
                     <div class="col100 centerV centerH">
                             <svg viewBox="0 0 458.706 458.706" xmlns="http://www.w3.org/2000/svg">
                                 <path d="m425.941 47.977v-47.977l-196.588 114.676-196.588-114.676v47.977l196.588 91.273z"/>
@@ -21,6 +33,9 @@
                             </svg>
                         <span class="mMarginLeft">ADMINISTRAR CURSOS</span>
                     </div>
+                    </a>
+                    
+                    <a href="./student?action=add">
                     <div class="col100 centerV centerH">
                             <svg xmlns="http://www.w3.org/2000/svg" style="width: 38px" viewBox="0 0 469.333 469.333">
 
@@ -35,6 +50,9 @@
                                                       
                         <span class="mMarginLeft">NUEVO ALUMNO</span>
                     </div>
+                    </a>
+                    
+                    <a href="./index?action=search">
                     <div class="col100 centerV centerH">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 341.333 341.333">
                             <path d="M170.667,170.667c47.147,0,85.333-38.293,85.333-85.333C256,38.187,217.813,0,170.667,0S85.333,38.187,85.333,85.333
@@ -44,6 +62,7 @@
                         </svg>   
                         <span class="mMarginLeft">VER ALUMNOS</span>
                     </div>
+                    </a>
                 </div>
             </div>
        </div>

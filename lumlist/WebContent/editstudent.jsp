@@ -7,9 +7,18 @@
     <body>
        <div id="header" class="col100 centerV">
            <img id="logoHeader" class="xlMarginLeft left" src="img/logo.png">
-           <div id="bAccessHeader" class="lMarginRight">
-                <button>ACCEDER</button>
-            </div>
+           <!-- Botones en funcion del logueo -->
+	    	<c:choose>
+			  	<c:when test="${(user!=null) and (user=='admin')}">
+	            	<jsp:include page="menu/admin.jsp" />
+			  	</c:when>
+		  		<c:when test="${(user!=null) and (user=='student')}">
+	            	<jsp:include page="menu/student.jsp" />
+			  	</c:when>
+			  	<c:otherwise>
+	                <jsp:include page="menu/visit.jsp" />
+			  	</c:otherwise>
+			</c:choose>
        </div>
 
        <div id="contentEditStudent" class="col100">
@@ -18,17 +27,28 @@
            <form action="student" method="post" enctype="multipart/form-data">
            <div id="infoEditCont" class="col100">
                 <div id="personalSection" class="col20">
-                    <img class="col100" src="img/profile.jpg">
+                
+	                <div id="photoContainer" class="col100">
+	                    <!-- Asignar fotografia si existe -->
+	                	<c:choose>
+						  <c:when test="${existPhoto}">
+	                       	<img id="imageProfile" class="col100" src="uploads/${student.id}.jpg">
+						  </c:when>
+						  <c:otherwise>
+	                       	<img id="imageProfile" class="col100" src="img/generic.jpg">
+						  </c:otherwise>
+						</c:choose>
+					</div>
+					
                     <div id="editPhoto" class="col100 sMarginTop centerH centerV">
                         <svg id="editIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 383.947 383.947">
                             <polygon points="0,303.947 0,383.947 80,383.947 316.053,147.893 236.053,67.893 			"/>
                             <path d="M377.707,56.053L327.893,6.24c-8.32-8.32-21.867-8.32-30.187,0l-39.04,39.04l80,80l39.04-39.04
                                 C386.027,77.92,386.027,64.373,377.707,56.053z"/>
                         </svg>
-                        <strong class="sMarginLeft">Editar foto</strong>
+                        <strong id="bSelectPhoto" class="sMarginLeft">Editar foto</strong>
                     </div>
-                    <button class="col100 xlMarginTop" type="submit">Guardar Cambios</button>
-                    <button class="col100 sMarginTop red">Eliminar Alumno</button>
+                    <button class="col100 xlMarginTop" type="submit">Guardar Cambios</button>                    
                 </div>
                
                 <div id="dataSection" class="col80">
@@ -68,9 +88,10 @@
                             <textarea class="col100" placeholder="Observaciones" name="observations">${student.observations}</textarea>
                         </div>
                         
-                        <span class="col100 sMarginBottom">Cambiar contraseña:</span>
+                        <span class="col100 sMarginBottom">Cambiar datos de login:</span>
                         <div class="col100 sPaddingLT mMarginBottom">
-                            <input class="col33" type="password" value="00000000" name="password">
+                        	<div class="col33 sPaddingLT"><input class="col100" type="text" value="${student.username}" disabled name="password"></div>
+                        	<div class="col33 sPaddingLT"><input class="col100" type="password" value="00000000" name="password"></div>
                         </div>
 
                         <span class="col100 sMarginBottom">Disponibilidad:</span>
@@ -111,7 +132,7 @@
                         	<c:forEach items="${courses}" var="course">
 	                        	<div class="check left">
 	                                <label class="containerCheck">${course.name.toUpperCase()}
-	                                    <input type="checkbox">
+	                                    <input id="course${course.id}" type="checkbox" name="selected" value="${course.id}">
 	                                    <span class="checkmark"></span>
 	                                </label>
 	                            </div>
@@ -124,13 +145,52 @@
                         </div>
                         <input type="hidden" value="${student.id}" name="id">
                         <input type="hidden" value="update" name="action">
-                        <input type="file" name="photo" accept=".jpg,.png"> 
+                        <input id="browseImage" type="file" name="photo" accept=".jpg,.png" style="display:none"> 
                 </div>
                 
-           </div>
-
-
+           	</div>
             </form>
        </div>
     </body>
+    	
+    <script>
+    	$( document ).ready(function() {
+    		
+    		//Marcar los cursos asociados
+    		var sc = ${studentCourses};
+    		for(var i=0;i<sc.length;i++){
+    			$("#course"+sc[i]).attr("checked", "checked");
+    		}
+
+    		//Emular click del input en el elemento html
+    		$("#bSelectPhoto").on("click", function(){
+    			$('#browseImage').trigger('click');
+    		});
+    		
+           	//Detectar examinacion de una imagen en el formulario
+            $("#browseImage").change(function() {
+   	        	loadPreview(this);
+ 	        });
+   	  
+   	        
+   	        //----------------------------------------------------------------------------------------------
+
+   	        /**
+   	        * METODO PARA CARGAR LA PREVISUALIZACIÓN DE UNA IMAGEN SELECCIONADA PARA EL FORMULARIO
+   	        */
+   	        function loadPreview(input) {
+   	            if (input.files && input.files[0]) {
+   	                //Establecer como atributo de la imagen la ruta de la imagen seleccionada
+   	                var reader = new FileReader();
+   	                reader.onload = function(e) {
+   	                    $('#imageProfile').attr('src', e.target.result);
+   	                }
+   	                reader.readAsDataURL(input.files[0]);
+   	            }else{
+   	                $('#imageProfile').attr('src', "img/generic.jpg");
+   	            }
+   	        }
+    		
+    	});
+    </script>
 </html>

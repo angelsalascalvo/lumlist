@@ -16,6 +16,13 @@ button{
 	color:white;
 	padding: 8px 30px;
 	cursor: pointer;
+	border: 2px solid black;
+}
+.bSecond{
+    border: 2px solid black;
+    font-weight: 700;
+    background-color: transparent;
+    color: black;
 }
 input{
 	height:45px;
@@ -24,6 +31,7 @@ input{
 }
 a{
 	text-decoration: none;
+	color:unset;
 }
 input[type="file"]{
 	border:none!important;
@@ -96,8 +104,16 @@ textarea{
 }
 #imageProfile{
 	border-radius:50%;
+	height: 100%;
+    width: 100%;
+    object-fit: cover;
+    position:absolute;
+    top:0;
 }
-
+#photoContainer{
+	position:relative;
+	padding-top:100%; 
+}
 #infoName{
 	font-size: 30px;
     font-weight: bold;
