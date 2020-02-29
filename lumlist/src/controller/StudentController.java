@@ -50,15 +50,19 @@ public class StudentController extends HttpServlet {
 		//En funcion de la accion actuaremos
 		switch(action) {
 			case "add":
-				/// Enviar informacion sobre logueo ///
-				if(session.getAttribute("admin") != null)
-					req.setAttribute("user", "admin");
-				else if(session.getAttribute("student") != null)
-					req.setAttribute("user", "student");
-				//////////////////////////////////
-				
-				rd = req.getRequestDispatcher("/addstudent.jsp");
-		        rd.forward(req, resp);
+				if(session.getAttribute("admin") != null) {
+					/// Enviar informacion sobre logueo ///
+					if(session.getAttribute("admin") != null)
+						req.setAttribute("user", "admin");
+					else if(session.getAttribute("student") != null)
+						req.setAttribute("user", "student");
+					//////////////////////////////////
+					
+					rd = req.getRequestDispatcher("/addstudent.jsp");
+			        rd.forward(req, resp);
+				}else {
+					resp.sendRedirect(req.getContextPath() + "/login");
+				}
 				break;
 				
 			case "show":
@@ -128,50 +132,67 @@ public class StudentController extends HttpServlet {
 				break;
 				
 			case "edit":
+				
 				int idEdit = Integer.parseInt(req.getParameter("id"));
-				//Obtener datos del alumno
-				StudentDao studentDaoEdit = new StudentDao(conn);
-		        Student studentEdit = studentDaoEdit.getById(idEdit);
-		        
-		        //Obtener todos los cursos
-		        CourseDao courseDao = new CourseDao(conn);
-		        List<Course> courses= courseDao.getAll(); 
-		        
-		        //Obtener los cursos asociados con el alumno
-		        StudentCourseDao scDao = new StudentCourseDao(conn);
-		        List<Integer> studentCourses= scDao.getCoursesStudent(idEdit); 
-		        
-		        //Comprobar si existe una foto para el usuario e indicarlo a la vista
-				String path = req.getServletContext().getRealPath("")+"uploads"; 
-				File photo = new File(path+"/"+idEdit+".jpg");
-				if(photo.exists())
-					req.setAttribute("existPhoto", true);
-				else
-					req.setAttribute("existPhoto", false);
-		        
-		        //Comprobar si se ha encontrado el usuario indicado
-				if(studentEdit.getId()>-1) {
-					req.setAttribute("student", studentEdit);
-					req.setAttribute("courses", courses);
-					req.setAttribute("studentCourses", studentCourses);
-					
-					/// Enviar informacion sobre logueo ///
-					if(session.getAttribute("admin") != null)
-						req.setAttribute("user", "admin");
-					else if(session.getAttribute("student") != null)
-						req.setAttribute("user", "student");
-					//////////////////////////////////
-					
-					rd = req.getRequestDispatcher("/editstudent.jsp");
-		        	rd.forward(req, resp);
+				//Proteger el controlador de usuarios no logueados
+				Student st=null;
+				if(session.getAttribute("student") != null) {
+					st = (Student) session.getAttribute("student");
+				}
+				//Solo administradores o usuarios registrados que intenten editar su propio perfil
+				if(session.getAttribute("admin") != null || (st!=null && st.getId()==idEdit)) {
+					//Obtener datos del alumno
+					StudentDao studentDaoEdit = new StudentDao(conn);
+			        Student studentEdit = studentDaoEdit.getById(idEdit);
+			        
+			        //Obtener todos los cursos
+			        CourseDao courseDao = new CourseDao(conn);
+			        List<Course> courses= courseDao.getAll(); 
+			        
+			        //Obtener los cursos asociados con el alumno
+			        StudentCourseDao scDao = new StudentCourseDao(conn);
+			        List<Integer> studentCourses= scDao.getCoursesStudent(idEdit); 
+			        
+			        //Comprobar si existe una foto para el usuario e indicarlo a la vista
+					String path = req.getServletContext().getRealPath("")+"uploads"; 
+					File photo = new File(path+"/"+idEdit+".jpg");
+					if(photo.exists())
+						req.setAttribute("existPhoto", true);
+					else
+						req.setAttribute("existPhoto", false);
+			        
+			        //Comprobar si se ha encontrado el usuario indicado
+					if(studentEdit.getId()>-1) {
+						req.setAttribute("student", studentEdit);
+						req.setAttribute("courses", courses);
+						req.setAttribute("studentCourses", studentCourses);
+						
+						/// Enviar informacion sobre logueo ///
+						if(session.getAttribute("admin") != null)
+							req.setAttribute("user", "admin");
+						else if(session.getAttribute("student") != null)
+							req.setAttribute("user", "student");
+						//////////////////////////////////
+						
+						rd = req.getRequestDispatcher("/editstudent.jsp");
+			        	rd.forward(req, resp);
+					}
+				}else {
+					resp.sendRedirect(req.getContextPath() + "/login");
 				}
 				break;
 				
 			case "remove":
-				int idRemove = Integer.parseInt(req.getParameter("id"));
-				//Obtener datos del alumno
-				StudentDao studentDaoRemove = new StudentDao(conn);
-		        studentDaoRemove.remove(idRemove);
+				if(session.getAttribute("admin") != null) {
+					int idRemove = Integer.parseInt(req.getParameter("id"));
+					//Obtener datos del alumno
+					StudentDao studentDaoRemove = new StudentDao(conn);
+			        studentDaoRemove.remove(idRemove);
+			        
+			        resp.sendRedirect(req.getContextPath() + "/?action=options");
+				}else {
+					resp.sendRedirect(req.getContextPath() + "/login");
+				}
 				break;
 		}
 	}
@@ -181,128 +202,156 @@ public class StudentController extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
 		String action = req.getParameter("action");
+		
 		//En funcion de la accion actuaremos
 		switch(action) {
 			case "update":
-				 int sId = Integer.parseInt(req.getParameter("id"));
-				 String sName = req.getParameter("name");
-				 String sSurname = req.getParameter("surname");
-				 String sEmail = req.getParameter("email");
-				 int sPhone = Integer.parseInt(req.getParameter("phone"));
-				 
-				 //Enlace linkedin
-				 String sLinkedin;
-				 if(req.getParameter("linkedin").length()==0)
-					 sLinkedin = null;
-				 else
-					 sLinkedin = req.getParameter("linkedin");
-				 
-				 //Enlace github
-				 String sGithub;
-				 if(req.getParameter("linkedin").length()==0)
-					 sGithub = null;
-				 else
-					 sGithub = req.getParameter("github");
-				 
-				//Observaciones
-				 String sObservations;
-				 if(req.getParameter("linkedin").length()==0)
-					 sObservations = null;
-				 else
-					 sObservations = req.getParameter("observations");		 
+				int sId = Integer.parseInt(req.getParameter("id"));
 				
-				 //Recuperar fecha indicada
-				 Date sBirth = new Date();
-				 try {
-					 String date = req.getParameter("birth");
-					 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-					 sBirth = format.parse(date);
-				 } catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				 }
+				//Proteger el controlador de usuarios no logueados
+				Student st=null;
+				if(session.getAttribute("student") != null) {
+					st = (Student) session.getAttribute("student");
+				}
+				//Solo administradores o usuarios registrados que intenten editar su propio perfil
+				if(session.getAttribute("admin") != null || (st!=null && st.getId()==sId)) {
 				 
-				 //Obtener si esta disponible o no
-				 boolean sAvailable = true;
-				 if(req.getParameter("status").equals("false")) {
-					 sAvailable = false;
-				 }
-				 			  
-				 
-				 //Llamada al metodo de actualizar
-				 DbConnection conn = new DbConnection();
-				 StudentDao studentDao = new StudentDao(conn);
-				 studentDao.update(sId, sName, sSurname, sEmail, sPhone, sLinkedin, sGithub, sObservations, sBirth, sAvailable);
-				 
-				 //Obtener cursos seleccionados y actualizar tabla intermedia
-				 StudentCourseDao scDao = new StudentCourseDao(conn);			 
-				 scDao.removeAllStudent(sId); //Eliminar las asociaciones para realizar las nuevas
-				 
-				 if( req.getParameterValues("selected")!=null) {
-					 String checks[] = req.getParameterValues("selected");
-				 	 //Insertar asociaciones marcadas
-					 for(int i=0;i<checks.length;i++) {
-						 scDao.add(sId, Integer.parseInt(checks[i]));
+					 String sName = req.getParameter("name");
+					 String sSurname = req.getParameter("surname");
+					 String sEmail = req.getParameter("email");
+					 String sPasswd = req.getParameter("passwd");
+					 int sPhone = Integer.parseInt(req.getParameter("phone"));
+					 
+					 //Enlace linkedin
+					 String sLinkedin;
+					 if(req.getParameter("linkedin").length()==0)
+						 sLinkedin = null;
+					 else
+						 sLinkedin = req.getParameter("linkedin");
+					 
+					 //Enlace github
+					 String sGithub;
+					 if(req.getParameter("linkedin").length()==0)
+						 sGithub = null;
+					 else
+						 sGithub = req.getParameter("github");
+					 
+					//Observaciones
+					 String sObservations;
+					 if(req.getParameter("linkedin").length()==0)
+						 sObservations = null;
+					 else
+						 sObservations = req.getParameter("observations");		 
+					
+					 //Recuperar fecha indicada
+					 Date sBirth = new Date();
+					 try {
+						 String date = req.getParameter("birth");
+						 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+						 sBirth = format.parse(date);
+					 } catch (ParseException e) {
+						e.printStackTrace();
 					 }
-				 }
-				 
-				 //Rutas
-				 String path = req.getServletContext().getRealPath("")+"uploads"; 
-				 File dir = new File(path);
-				 dir.mkdirs(); //Crear el directorio por si no esta creado 
-				 
-				 //Almacenar el curriculum si se ha examinado
-				 if(req.getPart("curriculum").getSize()!=0){
-					Part curriculum = req.getPart("curriculum"); // Obtener el archivo		 
-			 	    String fileName = Paths.get(curriculum.getSubmittedFileName()).getFileName().toString();
-			 	    String[] p = fileName.split("\\.");
-			 	    String extension = p[p.length-1];
-			 	    
-			 	    //Asegurarse de que el fichero tiene la extension adecuada
-			 	    if(extension.equalsIgnoreCase("pdf")){
-			 	    	InputStream content = curriculum.getInputStream();
-				 	    File file = new File(path+"/"+sId+".pdf");
-				 	    //Guardar fichero en el directorio adecuado	 	    
-				 	    saveUploadFile(file, content);
-			 	    }
-				 }
-				 
-				 //Almacenar la imagen si se ha examinado
-				 if(req.getPart("photo").getSize()!=0){
-					Part curriculum = req.getPart("photo"); // Obtener el archivo		 
-			 	    String fileName = Paths.get(curriculum.getSubmittedFileName()).getFileName().toString();
-			 	    String[] p = fileName.split("\\.");
-			 	    String extension = p[p.length-1];
-			 	    
-			 	    //Asegurarse de que el fichero tiene la extension adecuada
-			 	    if(extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("png")) {
-			 	    	InputStream content = curriculum.getInputStream();
-				 	    File file = new File(path+"/"+sId+".jpg");
-				 	    //Guardar fichero en el directorio adecuado	 	    
-				 	    saveUploadFile(file, content);
-			 	    }
-				 }
-				 resp.sendRedirect(req.getContextPath() + "/student?action=show&id="+sId);
-				 break;
+					 
+					 //Obtener si esta disponible o no
+					 boolean sAvailable = true;
+					 if(req.getParameter("status").equals("false")) {
+						 sAvailable = false;
+					 }
+					 			  
+					 
+					 //Llamada al metodo de actualizar
+					 DbConnection conn = new DbConnection();
+					 StudentDao studentDao = new StudentDao(conn);
+					 studentDao.update(sId, sName, sSurname, sEmail, sPhone, sLinkedin, sGithub, sObservations, sBirth, sAvailable);
+					 
+					 //Obtener cursos seleccionados y actualizar tabla intermedia
+					 StudentCourseDao scDao = new StudentCourseDao(conn);			 
+					 scDao.removeAllStudent(sId); //Eliminar las asociaciones para realizar las nuevas
+					 
+					 if( req.getParameterValues("selected")!=null) {
+						 String checks[] = req.getParameterValues("selected");
+					 	 //Insertar asociaciones marcadas
+						 for(int i=0;i<checks.length;i++) {
+							 scDao.add(sId, Integer.parseInt(checks[i]));
+						 }
+					 }
+					 
+					 //Rutas
+					 String path = req.getServletContext().getRealPath("")+"uploads"; 
+					 File dir = new File(path);
+					 dir.mkdirs(); //Crear el directorio por si no esta creado 
+					 
+					 //Almacenar el curriculum si se ha examinado
+					 if(req.getPart("curriculum").getSize()!=0){
+						Part curriculum = req.getPart("curriculum"); // Obtener el archivo		 
+				 	    String fileName = Paths.get(curriculum.getSubmittedFileName()).getFileName().toString();
+				 	    String[] p = fileName.split("\\.");
+				 	    String extension = p[p.length-1];
+				 	    
+				 	    //Asegurarse de que el fichero tiene la extension adecuada
+				 	    if(extension.equalsIgnoreCase("pdf")){
+				 	    	InputStream content = curriculum.getInputStream();
+					 	    File file = new File(path+"/"+sId+".pdf");
+					 	    //Guardar fichero en el directorio adecuado	 	    
+					 	    saveUploadFile(file, content);
+				 	    }
+					 }
+					 
+					 //Almacenar la imagen si se ha examinado
+					 if(req.getPart("photo").getSize()!=0){
+						Part curriculum = req.getPart("photo"); // Obtener el archivo		 
+				 	    String fileName = Paths.get(curriculum.getSubmittedFileName()).getFileName().toString();
+				 	    String[] p = fileName.split("\\.");
+				 	    String extension = p[p.length-1];
+				 	    
+				 	    //Asegurarse de que el fichero tiene la extension adecuada
+				 	    if(extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("png")) {
+				 	    	InputStream content = curriculum.getInputStream();
+					 	    File file = new File(path+"/"+sId+".jpg");
+					 	    //Guardar fichero en el directorio adecuado	 	    
+					 	    saveUploadFile(file, content);
+				 	    }
+					 }
+					 
+					 //Actualizar la contraseña si se ha cambiado
+					 if(!sPasswd.equals("00000000") && !sPasswd.equals("")) {
+						 studentDao.updatePass(sPasswd, sId);
+					 }
+					 
+					 conn.disconnect();
+					 resp.sendRedirect(req.getContextPath() + "/student?action=show&id="+sId);
+					 
+				}else {
+					resp.sendRedirect(req.getContextPath() + "/login");
+				}
+				break;
 				 
 				 
 			case "store":
-				 String sNameAdd = req.getParameter("name");
-				 String sSurnameAdd = req.getParameter("surname");
-				 String sUsernameAdd = req.getParameter("username");
-				 String sPasswdAdd = req.getParameter("passwd");
-				 
-				 //Llamada al metodo de insertar
-				 DbConnection connInsert = new DbConnection();
-				 StudentDao studentDaoInsert = new StudentDao(connInsert);
-				 int newId = studentDaoInsert.add(sNameAdd, sSurnameAdd, sUsernameAdd, sPasswdAdd);
-				 
-				 resp.sendRedirect(req.getContextPath() + "/student?action=show&id="+newId);
+				if(session.getAttribute("admin") != null) {
+					 String sNameAdd = req.getParameter("name");
+					 String sSurnameAdd = req.getParameter("surname");
+					 String sUsernameAdd = req.getParameter("username");
+					 String sPasswdAdd = req.getParameter("passwd");
+					 
+					 //Llamada al metodo de insertar
+					 DbConnection connInsert = new DbConnection();
+					 StudentDao studentDaoInsert = new StudentDao(connInsert);
+					 int newId = studentDaoInsert.add(sNameAdd, sSurnameAdd, sUsernameAdd, sPasswdAdd);
+					 
+					 resp.sendRedirect(req.getContextPath() + "/student?action=show&id="+newId);
+				}else {
+					resp.sendRedirect(req.getContextPath() + "/login");
+				}
 				break;
 		}
 	}
 
+	//-----------------------------------------------------------------------------------
+	
 	/**
 	 * METODO PARA ALMACENAR UN FICHERO A PARTIR DE UN FLUJO DE ENTRADA
 	 * @param fileOutput

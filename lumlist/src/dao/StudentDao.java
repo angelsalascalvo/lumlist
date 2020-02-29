@@ -35,7 +35,7 @@ public class StudentDao {
 
 	        try {
 	        	//Consulta SQL
-	            String sql = "select * from students where username=? and passwd = ? limit 1";
+	            String sql = "select * from students where username=? and passwd = md5(?) limit 1";
 	            PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
 	            preparedStatement.setString(1, user);
 	            preparedStatement.setString(2, pass);
@@ -115,6 +115,27 @@ public class StudentDao {
     		} 
 	    }
 	    
+	    /**
+	     * METODO PARA ACTUALIZAR CONTRASEÑA DE LA CUENTA
+	     * @param passwd
+	     * @param id
+	     */
+	    public void updatePass(String passwd, int id) {
+	    	try {
+	    		 String sql = "update students set passwd= md5(?) where id=?";
+		    	 PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
+		         preparedStatement.setString(1, passwd);
+		         preparedStatement.setInt(2, id);
+		         
+		         //Ejecutar actualizacion
+		         preparedStatement.executeUpdate();
+		         preparedStatement.close();
+		         
+    		} catch (SQLException e) {
+    			System.out.println("Error al actualizar " + e.getMessage());
+    		} 
+	    }
+	    
 	    //---------------------------------------------------------------------------
 	    
 	    public void remove(int id) {
@@ -122,6 +143,10 @@ public class StudentDao {
 	    		 String sql = "delete from students where id=?";
 		    	 PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
 		         preparedStatement.setInt(1, id);
+		         
+		         //Ejecutar borrado
+		         preparedStatement.executeUpdate();
+		         preparedStatement.close();
 		    } catch (SQLException e) {
 				System.out.println("Error al actualizar " + e.getMessage());
 			} 
@@ -132,7 +157,7 @@ public class StudentDao {
 	    
 	    public int add(String name, String surname, String username, String passwd) {
 	    	try {
-	    		 String sql = "insert into students (name, surname, username, passwd, birth_date, available, phone, email) values (?,?,?,?,?,?,?,?)";
+	    		 String sql = "insert into students (name, surname, username, passwd, birth_date, available, phone, email) values (?,?,?,md5(?),?,?,?,?)";
 		    	 PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
 		         preparedStatement.setString(1, name);
 		         preparedStatement.setString(2, surname);

@@ -21,25 +21,28 @@ public class CoursesController extends HttpServlet {
 		HttpSession session = req.getSession();
 		RequestDispatcher rd;
 		DbConnection conn = new DbConnection();
-				
-		CourseDao courseDao = new CourseDao(conn);
-        List<Course> list = courseDao.getAll();
-        // Compartimos la variable lista, para poder accederla desde la vista
-        req.setAttribute("courses", list);
-        System.out.println(list.size());
-        
-        conn.disconnect();
-        
-        /// Enviar informacion sobre logueo ///
-		if(session.getAttribute("admin") != null)
-			req.setAttribute("user", "admin");
-		else if(session.getAttribute("student") != null)
-			req.setAttribute("user", "student");
-		//////////////////////////////////
-        
-        //Mostrar la vista 
-		rd = req.getRequestDispatcher("/courses.jsp");
-        rd.forward(req, resp);
+		if(session.getAttribute("admin") != null) {
+			CourseDao courseDao = new CourseDao(conn);
+	        List<Course> list = courseDao.getAll();
+	        // Compartimos la variable lista, para poder accederla desde la vista
+	        req.setAttribute("courses", list);
+	        System.out.println(list.size());
+	        
+	        conn.disconnect();
+	        
+	        /// Enviar informacion sobre logueo ///
+			if(session.getAttribute("admin") != null)
+				req.setAttribute("user", "admin");
+			else if(session.getAttribute("student") != null)
+				req.setAttribute("user", "student");
+			//////////////////////////////////
+	        
+	        //Mostrar la vista 
+			rd = req.getRequestDispatcher("/courses.jsp");
+	        rd.forward(req, resp);
+		}else {
+			resp.sendRedirect(req.getContextPath() + "/login");
+		}
         
 	}
 	
@@ -54,37 +57,52 @@ public class CoursesController extends HttpServlet {
 		//En funcion de la accion actuaremos
 		switch(action) {
 			case "remove":
-				int idRemove = Integer.parseInt(req.getParameter("id"));
-				//Obtener datos del alumno
-				conn = new DbConnection();
-				CourseDao courseDaoRemove = new CourseDao(conn);
-				courseDaoRemove.remove(idRemove);
-				//Recargar esta página
-				 doGet(req, resp);
+				if(session.getAttribute("admin") != null) {
+					int idRemove = Integer.parseInt(req.getParameter("id"));
+					//Obtener datos del alumno
+					conn = new DbConnection();
+					CourseDao courseDaoRemove = new CourseDao(conn);
+					courseDaoRemove.remove(idRemove);
+					//Recargar esta página
+					resp.sendRedirect(req.getContextPath() + "/courses");
+				}else {
+					resp.sendRedirect(req.getContextPath() + "/login");
+				}
 				break;
 				
 			case "update":
-				 int sId = Integer.parseInt(req.getParameter("id"));
-				 String sName = req.getParameter("name");
-				 //Llamada al metodo de actualizar
-				 conn = new DbConnection();
-				 CourseDao courseDao = new CourseDao(conn);
-				 courseDao.update(sId, sName);
-				 
-				 //Recargar esta página
-				 doGet(req, resp);
+				 if(session.getAttribute("admin") != null) {
+					 int sId = Integer.parseInt(req.getParameter("id"));
+					 String sName = req.getParameter("name");
+					 //Llamada al metodo de actualizar
+					 conn = new DbConnection();
+					 CourseDao courseDao = new CourseDao(conn);
+					 courseDao.update(sId, sName);
+					 
+					 //Recargar esta página
+					 resp.sendRedirect(req.getContextPath() + "/courses");
+				 }else {
+					resp.sendRedirect(req.getContextPath() + "/login");
+				 }
 				 break;
+			
 				 
+		    /*
+		     * ALMACENAR CURSO EN LA BASE DE DATOS 
+		     */
 			case "store":
-				 String sNameAdd = req.getParameter("name");				 
-				 //Llamada al metodo de insertar
-				 conn = new DbConnection();
-				 CourseDao courseDaoInsert = new CourseDao(conn);
-				 courseDaoInsert.add(sNameAdd);
-				 conn.disconnect();
-				 //Recargar esta página
-				 doGet(req, resp);
-				 
+				if(session.getAttribute("admin") != null) {
+					 String sNameAdd = req.getParameter("name");				 
+					 //Llamada al metodo de insertar
+					 conn = new DbConnection();
+					 CourseDao courseDaoInsert = new CourseDao(conn);
+					 courseDaoInsert.add(sNameAdd);
+					 conn.disconnect();
+					 //Recargar esta página
+					 resp.sendRedirect(req.getContextPath() + "/courses");
+				}else {
+					resp.sendRedirect(req.getContextPath() + "/login");
+				}
 				break;
 		}
 	}

@@ -6,7 +6,9 @@
     <jsp:include page="head.jsp"/>
     <body>
        <div id="header" class="col100 centerV">
-           <img id="logoHeader" class="xlMarginLeft left" src="img/logo.png">
+           <a href="./">
+      			<img id="logoHeader" class="xlMarginLeft left" src="img/logo.png">
+      		</a>
            <!-- Botones en funcion del logueo -->
 	    	<c:choose>
 			  	<c:when test="${(user!=null) and (user=='admin')}">
@@ -90,8 +92,8 @@
                         
                         <span class="col100 sMarginBottom">Cambiar datos de login:</span>
                         <div class="col100 sPaddingLT mMarginBottom">
-                        	<div class="col33 sPaddingLT"><input class="col100" type="text" value="${student.username}" disabled name="password"></div>
-                        	<div class="col33 sPaddingLT"><input class="col100" type="password" value="00000000" name="password"></div>
+                        	<div class="col33 sPaddingLT"><input class="col100" type="text" value="${student.username}" disabled></div>
+                        	<div class="col33 sPaddingLT"><input class="col100" type="password" value="00000000" name="passwd"></div>
                         </div>
 
                         <span class="col100 sMarginBottom">Disponibilidad:</span>

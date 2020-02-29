@@ -15,8 +15,8 @@
 		  	</c:when> 
 	  		<c:when test="${(user!=null) and (user=='student')}">
             	<div id="bAccess" class="absolute">
-				    <button>EDITAR PERFIL</button>
-				    <button class="bSecond">CERRAR SESION</button>
+				     <a href=".?action=account"><button>EDITAR PERFIL</button></a>
+				     <a href="./login?action=logout"><button class="bSecond">CERRAR SESION</button></a>
 				</div>
 		  	</c:when>
 		  	<c:otherwise>

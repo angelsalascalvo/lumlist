@@ -156,15 +156,19 @@ public class SiteController extends HttpServlet {
 					break;
 					
 				case "options":
-					/// Enviar informacion sobre logueo ///
-					if(session.getAttribute("admin") != null)
-						req.setAttribute("user", "admin");
-					else if(session.getAttribute("student") != null)
-						req.setAttribute("user", "student");
-					//////////////////////////////////
-					
-					rd = req.getRequestDispatcher("/options.jsp");
-			        rd.forward(req, resp);
+					if(session.getAttribute("admin") != null) {
+						/// Enviar informacion sobre logueo ///
+						if(session.getAttribute("admin") != null)
+							req.setAttribute("user", "admin");
+						else if(session.getAttribute("student") != null)
+							req.setAttribute("user", "student");
+						//////////////////////////////////
+						
+						rd = req.getRequestDispatcher("/options.jsp");
+				        rd.forward(req, resp);
+					}else {
+						resp.sendRedirect(req.getContextPath() + "/login");
+					}
 					break;
 				
 				/*
@@ -177,7 +181,7 @@ public class SiteController extends HttpServlet {
 						resp.sendRedirect(req.getContextPath() + "/student?action=edit&id="+student.getId());
 						 break;
 					}else {
-						resp.sendRedirect(req.getContextPath() + "/");
+						resp.sendRedirect(req.getContextPath() + "/login");
 					}
 					break;
 			}

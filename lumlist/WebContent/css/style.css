@@ -14,7 +14,7 @@ button{
 	border:none;
 	background-color: #000;
 	color:white;
-	padding: 8px 30px;
+	padding: 5px 30px;
 	cursor: pointer;
 	border: 2px solid black;
 }
@@ -44,6 +44,7 @@ textarea{
 }
 .red{
 	background-color: rgb(218, 22, 22)!important;
+	border: 2px solid rgb(218, 22, 22)!important;
 }
 /******************* PORTADA ****************/
 #cover{
@@ -129,6 +130,7 @@ textarea{
 
 #infoAvai{
 	background-color: rgb(92, 153, 0);
+	border: 2px solid  rgb(92, 153, 0);
 }
 .contactData svg{
 	width: 30px;

@@ -6,7 +6,10 @@
     <jsp:include page="head.jsp" />  
     <body>
        <div id="header" class="col100 centerV">
-           <img id="logoHeader" class="xlMarginLeft left" src="img/logo.png">
+           <a href="./">
+      			<img id="logoHeader" class="xlMarginLeft left" src="img/logo.png">
+      		</a>
+      		
            <!-- Botones en funcion del logueo -->
 	    	<c:choose>
 			  	<c:when test="${(user!=null) and (user=='admin')}">
