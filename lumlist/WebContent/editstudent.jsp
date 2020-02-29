@@ -14,6 +14,7 @@
 
        <div id="contentEditStudent" class="col100">
            <div id="titleEdit" class="col100">EDITAR PERFIL</div>
+           
            <form action="student" method="post" enctype="multipart/form-data">
            <div id="infoEditCont" class="col100">
                 <div id="personalSection" class="col20">
@@ -75,14 +76,31 @@
                         <span class="col100 sMarginBottom">Disponibilidad:</span>
                         <div class="col100 mMarginBottom">
                             <div class="check col100">
+                            	<!-- Marcar que boton de radio esta seleccionado -->
                                 <label class="containerRadio">Disponible
-                                    <input type="radio" name="status" checked="checked">
+                                 <c:choose>
+									  <c:when test="${student.available}">
+				                       	<input type="radio" name="status" checked="checked" value="true">
+									  </c:when>
+									  <c:otherwise>
+				                       	<input type="radio" name="status" value="true">
+									  </c:otherwise>
+								 </c:choose>
+                                    
                                     <span class="checkmarkRadio"></span>
                                 </label>
                             </div>
                             <div class="check col100">
                                 <label class="containerRadio">No disponible
-                                    <input type="radio" name="status">
+	                                <c:choose>
+										  <c:when test="${student.available}">
+				                       		<input type="radio" name="status" value="false">
+										  </c:when>
+										  <c:otherwise>
+					                       	<input type="radio" name="status" checked="checked" value="false">
+										  </c:otherwise>
+									 </c:choose>
+                                    
                                     <span class="checkmarkRadio"></span>
                                 </label>
                             </div>
@@ -90,33 +108,23 @@
                         
                         <span class="col100 sMarginBottom">Estudios:</span>
                         <div class="col100 mMarginBottom">
-                            <div class="check left">
-                                <label class="containerCheck">DAW
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-            
-                            <div class="check left">
-                                <label class="containerCheck">DAM
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-            
-                            <div class="check left">
-                                <label class="containerCheck">ASIR
-                                    <input type="checkbox">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
+                        	<c:forEach items="${courses}" var="course">
+	                        	<div class="check left">
+	                                <label class="containerCheck">${course.name.toUpperCase()}
+	                                    <input type="checkbox">
+	                                    <span class="checkmark"></span>
+	                                </label>
+	                            </div>
+                        	</c:forEach>
                         </div>
                       
                         <span class="col100">Curriculum:</span>
                         <div class="col100">
-                                <div class="col50"><input class="col100" type="file" name="curriculum"></div>
+                                <div class="col50"><input class="col100" type="file" name="curriculum" accept=".pdf"></div>
                         </div>
                         <input type="hidden" value="${student.id}" name="id">
+                        <input type="hidden" value="update" name="action">
+                        <input type="file" name="photo" accept=".jpg,.png"> 
                 </div>
                 
            </div>

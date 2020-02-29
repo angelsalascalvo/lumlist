@@ -460,6 +460,7 @@ textarea{
   #bAddStudy{
 	  bottom: 35px;
 	  right: 35px;
+	  position:fixed;	
   }
   #bAddStudy button{
 	  width: 60px;

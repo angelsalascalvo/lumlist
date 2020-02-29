@@ -16,7 +16,16 @@
             <!-- panel lateral informacion personal -->
             <div id="personalSection" class="col25 row100 centerH">
                 <div class="col65">
-                    <img id="imageProfile" class="col100" src="img/profile.jpg">
+                
+                	<c:choose>
+					  <c:when test="${existPhoto}">
+                       	<img id="imageProfile" class="col100" src="uploads/${student.id}.jpg">
+					  </c:when>
+					  <c:otherwise>
+                       	<img id="imageProfile" class="col100" src="img/generic.jpg">
+					  </c:otherwise>
+					</c:choose>
+                    
                     <span id="infoName" class="col100 lMarginTop">${student.name}</span>
                     <span id="infoSurname" class="col100">${student.surname}</span>
                                         
@@ -112,7 +121,17 @@
             <!-- panel con curriculum -->
             <div id="cvSection" class="col45 row100">
                 <span class="titleData lMarginTop col100">Curriculum:</span>
-                <embed class="mMarginTop"src='test.pdf' width='100%' height='90%' alt='pdf' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>
+                <!-- Comprobar si existe un curriculum para establecer uno generico en caso negativo -->
+                <c:choose>
+				  <c:when test="${existCurri}">
+                      	 <embed class="mMarginTop"src='uploads/${student.id}.pdf' width='100%' height='90%' alt='pdf' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>
+				  </c:when>
+				  <c:otherwise>
+                      	 <embed class="mMarginTop"src='doc/generic.pdf' width='100%' height='90%' alt='pdf' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>
+				  </c:otherwise>
+				</c:choose>
+                   
+    
             </div>
        </div>
     </body>
