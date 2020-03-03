@@ -8,7 +8,6 @@ package controller;
 import dao.AdminDao;
 import dao.DbConnection;
 import dao.StudentDao;
-
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,19 +19,19 @@ import javax.servlet.http.HttpSession;
 import model.Admin;
 import model.Student;
 
-/**
- *
- * @author rutil
- */
+/////////////////// CONTROLADOR LOGIN DEL SITIO ////////////////////////
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
+	/**
+	 * RECIBIR PETICIONES GET
+	 */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
 		HttpSession session = req.getSession();
 		RequestDispatcher rd;
-		DbConnection conn = new DbConnection();
 		
 		if(req.getParameter("action")==null) {
 			 //Comprobar si esta registrado
@@ -52,9 +51,12 @@ public class LoginController extends HttpServlet {
 			}
 		}
     }
+    
+    //----------------------------------------------------------------------------------------
    
     /**
-     * METODO PARA COMPROBAR SI UN USUARIO Y CONTRASEÑA CORRESPONDEN CON ALGUN
+	 * RECIBIR PETICIONES POST
+	 * COMPROBAR SI UN USUARIO Y CONTRASEÑA CORRESPONDEN CON ALGUN
      * ADMINISTRADOR O ALUMNO DE LA BASE DE DATOS
      */
     @Override

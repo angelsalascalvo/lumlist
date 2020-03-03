@@ -39,6 +39,8 @@ public class DbConnection {
          System.out.println("Excepcion driver: " + e.getMessage());         
       }
    }
+   
+   //------------------------------------------------------------------------------------------
 
    /**
     * Permite retornar la instancia de la conexion
@@ -46,6 +48,8 @@ public class DbConnection {
    public Connection getConnection() {      
       return conn;
    }
+   
+   //------------------------------------------------------------------------------------------
 
    // Quitamos de memoria la conexion
    public void disconnect() {

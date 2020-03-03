@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import dao.CourseDao;
 import dao.DbConnection;
 import dao.StudentCourseDao;
@@ -20,11 +18,14 @@ import dao.StudentDao;
 import model.Course;
 import model.Student;
 
-/**
- * Servlet implementation class siteController
- */
+/////////////////// CONTROLADOR DE PAGINAS GENERALES DEL SITIO ////////////////////////
 @WebServlet("/index")
 public class SiteController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * RECIBIR PETICIONES GET
+	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String action = req.getParameter("action");
 		HttpSession session = req.getSession();
@@ -44,6 +45,8 @@ public class SiteController extends HttpServlet {
 		}else {		
 			//En funcion de la accion actuaremos
 			switch(action) {
+			
+				// BUSQUEDA DE ALUMNOS
 				case "search":
 					
 					String key = req.getParameter("key");
@@ -155,6 +158,7 @@ public class SiteController extends HttpServlet {
 			        rd.forward(req, resp);
 					break;
 					
+				//OPCIONES DEL ADMINISTRADOR
 				case "options":
 					if(session.getAttribute("admin") != null) {
 						/// Enviar informacion sobre logueo ///
@@ -171,9 +175,7 @@ public class SiteController extends HttpServlet {
 					}
 					break;
 				
-				/*
-				 * MOSTRAR CUENTA DEL USUARIO REGISTRADO
-				 */
+				// MOSTRAR PERFIL DEL USUARIO REGISTRADO
 				case "account":
 					//Obtener usuario a traves de la variable de sesion
 					if(session.getAttribute("student") != null) {
@@ -183,6 +185,12 @@ public class SiteController extends HttpServlet {
 					}else {
 						resp.sendRedirect(req.getContextPath() + "/login");
 					}
+					break;
+					
+				// MOSTRAR CRÉDITOS
+				case "credits":
+					rd = req.getRequestDispatcher("/credits.jsp");
+			        rd.forward(req, resp);
 					break;
 			}
 		}

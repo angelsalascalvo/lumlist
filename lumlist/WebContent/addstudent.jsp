@@ -1,4 +1,3 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
@@ -29,12 +28,12 @@
             <div class="col100 centerH xlMarginTop">
                 <div id="newStudentData" class="col30">
                 	<form action="student" method="post">
-	                    <input class="col100 sMarginTop" type="text" placeholder="Nombre" name="name">
-	                    <input class="col100 sMarginTop" type="text" placeholder="Apellidos" name="surname">
-	                    <input  class="col100 mMarginTop" type="text" placeholder="Usuario" name="username">
-	                    <input class="col100 sMarginTop" type="password" placeholder="ContraseÃ±a" name="passwd">
+	                    <input class="col100 sMarginTop" type="text" placeholder="Nombre" name="name" required>
+	                    <input class="col100 sMarginTop" type="text" placeholder="Apellidos" name="surname" required>
+	                    <input  class="col100 mMarginTop" type="text" placeholder="Usuario" name="username" required>
+	                    <input class="col100 sMarginTop" type="password" placeholder="Contraseña" name="passwd" required>
 	                    <input type="hidden" value="store" name="action">
-	                    <button class="col100 lMarginTop" type="submit">AÃ±adir</button>
+	                    <button class="col100 lMarginTop" type="submit">Añadir</button>
                     </form>
                 </div>
             </div>

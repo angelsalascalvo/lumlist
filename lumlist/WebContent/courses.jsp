@@ -1,4 +1,3 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
@@ -15,16 +14,16 @@
                 </div>
                 <div id="newStudy" class="col100">
                 	<form id="fAdd" action="courses" method="post">
-                		 <span class="col100 titModal"> AÃ‘ADIR CURSO</span>
-                    	<input class="col100 xlMarginTop" type="text" placeholder="Nombre" name="name">
+                		 <span class="col100 titModal"> AÑADIR CURSO</span>
+                    	<input class="col100 xlMarginTop" type="text" placeholder="Nombre" name="name" required>
                     	<input type="hidden" name="action" value="store">
-                    	<button id="bSubmitAdd" class="col100 mMarginTop" type="button">AÃ±adir</button>
+                    	<button id="bSubmitAdd" class="col100 mMarginTop" type="button">Añadir</button>
                 	</form>
                 </div>
                 <div id="editStudy" class="col100" style="display: none">
                 	<form id="fEdit" action="courses" method="post">
 	                    <span class="col100 titModal"> EDITAR CURSO</span>  
-	                    <input id="nameEdit" class="col100 xlMarginTop" type="text" placeholder="Nombre" name="name">
+	                    <input id="nameEdit" class="col100 xlMarginTop" type="text" placeholder="Nombre" name="name" required>
 	                    <input id="idEdit" type="hidden" name="id">
                         <input type="hidden" name="action" value="update">
 	                    <button id="bSubmitEdit" class="col100 mMarginTop" type="button">Guardar Cambios</button>
@@ -91,7 +90,7 @@
     			$("#modal").hide();
     		})
     		
-    		//Click boton aÃ±adir curso
+    		//Click boton añadir curso
     		$("#bAddStudy").on("click", function(){
     			$("#modal").show();
     			$("#newStudy").show();
@@ -111,14 +110,14 @@
     		
     		//Click boton eliminar curso
     		$(".bSubmitRemove").on("click", function(){
-    			var resp = confirm("Â¿Desea eliminar el recurso?");
+    			var resp = confirm("¿Desea eliminar el recurso?");
     			if(resp){
     				var id=$(this).val();
     				$(".removeForm"+id).submit();
     			}
     		});
     		
-    		//Click boton aÃ±adir
+    		//Click boton añadir
     		$("#bSubmitAdd").on("click", function(){ $("#fAdd").submit(); });
     		$("#bSubmitEdit").on("click", function(){ $("#fEdit").submit(); });
     	});

@@ -1,4 +1,3 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
@@ -57,6 +56,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <div id="credits">
+        	<a href=".?action=credits"><span>Créditos</span></a>
         </div>
     </body>
     

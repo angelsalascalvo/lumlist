@@ -13,10 +13,15 @@ import dao.CourseDao;
 import dao.DbConnection;
 import model.Course;
 
-
+/////////////////// CONTROLADOR CURSOS ////////////////////////
 @WebServlet("/courses")
 public class CoursesController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
+	/**
+	 * RECIBIR PETICIONES GET
+	 * LISTA TODOS LOS CURSOS ALMACENADOS EN LA BASE DE DATOS
+	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		RequestDispatcher rd;
@@ -46,16 +51,20 @@ public class CoursesController extends HttpServlet {
         
 	}
 	
+	//-------------------------------------------------------------------------------------------------------------
 	
+	/**
+	 * RECIBIR PETICIONES POST
+	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String action = req.getParameter("action");
 		HttpSession session = req.getSession();
-		RequestDispatcher rd;
 		DbConnection conn;
 		
 		//En funcion de la accion actuaremos
 		switch(action) {
+			//ELIMIMAR CURSO DE LA BASE DE DATOS
 			case "remove":
 				if(session.getAttribute("admin") != null) {
 					int idRemove = Integer.parseInt(req.getParameter("id"));
@@ -70,6 +79,7 @@ public class CoursesController extends HttpServlet {
 				}
 				break;
 				
+			//ACTUALIZAR CURSO EN LA BASE DE DATOS
 			case "update":
 				 if(session.getAttribute("admin") != null) {
 					 int sId = Integer.parseInt(req.getParameter("id"));
@@ -87,9 +97,8 @@ public class CoursesController extends HttpServlet {
 				 break;
 			
 				 
-		    /*
-		     * ALMACENAR CURSO EN LA BASE DE DATOS 
-		     */
+		    
+		    // ALMACENAR CURSO EN LA BASE DE DATOS 
 			case "store":
 				if(session.getAttribute("admin") != null) {
 					 String sNameAdd = req.getParameter("name");				 

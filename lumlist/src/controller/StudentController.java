@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -25,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-
 import dao.CourseDao;
 import dao.DbConnection;
 import dao.StudentCourseDao;
@@ -33,13 +31,15 @@ import dao.StudentDao;
 import model.Course;
 import model.Student;
 
-/**
- * Servlet implementation class StudientController
- */
+/////////////////// CONTROLADOR ESTUDIANTES - ALUMNOS ////////////////////////
 @WebServlet("/student")
 @MultipartConfig
 public class StudentController extends HttpServlet {
-		
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * RECIBIR PETICIONES GET
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String action = req.getParameter("action");
@@ -49,6 +49,7 @@ public class StudentController extends HttpServlet {
 		
 		//En funcion de la accion actuaremos
 		switch(action) {
+			//MOSTRAR FORMULARIO DE NUEVO ALUMNO
 			case "add":
 				if(session.getAttribute("admin") != null) {
 					/// Enviar informacion sobre logueo ///
@@ -65,6 +66,7 @@ public class StudentController extends HttpServlet {
 				}
 				break;
 				
+			//MOSTRAR ALUMNO
 			case "show":
 				int id = Integer.parseInt(req.getParameter("id"));
 				//Obtener datos del alumno
@@ -131,6 +133,7 @@ public class StudentController extends HttpServlet {
 				}
 				break;
 				
+			// MOSTRAR FORMULARIO EDICION DE UN ALUMNO
 			case "edit":
 				
 				int idEdit = Integer.parseInt(req.getParameter("id"));
@@ -182,6 +185,7 @@ public class StudentController extends HttpServlet {
 				}
 				break;
 				
+			// ELIMINAR UN ALUMNO DE LA BASE DE DATOS
 			case "remove":
 				if(session.getAttribute("admin") != null) {
 					int idRemove = Integer.parseInt(req.getParameter("id"));
@@ -197,8 +201,10 @@ public class StudentController extends HttpServlet {
 		}
 	}
 	
+	//-----------------------------------------------------------------------------------------------
+
 	/**
-	 * RECEPCION DEL FORMULARIO DE ACTUALIZACION DE UN ESTUDIANTE
+	 * RECIBIR PETICIONES POST
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -207,6 +213,8 @@ public class StudentController extends HttpServlet {
 		
 		//En funcion de la accion actuaremos
 		switch(action) {
+			
+			// ACTUALIZACIÓN DE LOS DATOS DE UN ALUMNO EN LA BASE DE DATOS
 			case "update":
 				int sId = Integer.parseInt(req.getParameter("id"));
 				
@@ -259,8 +267,7 @@ public class StudentController extends HttpServlet {
 					 boolean sAvailable = true;
 					 if(req.getParameter("status").equals("false")) {
 						 sAvailable = false;
-					 }
-					 			  
+					 }				 			  
 					 
 					 //Llamada al metodo de actualizar
 					 DbConnection conn = new DbConnection();
@@ -329,7 +336,7 @@ public class StudentController extends HttpServlet {
 				}
 				break;
 				 
-				 
+			// PROCESO DE ALMACENAR UN NUEVO ALUMNO EN LA BASE DE DATOS
 			case "store":
 				if(session.getAttribute("admin") != null) {
 					 String sNameAdd = req.getParameter("name");
@@ -350,7 +357,7 @@ public class StudentController extends HttpServlet {
 		}
 	}
 
-	//-----------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------
 	
 	/**
 	 * METODO PARA ALMACENAR UN FICHERO A PARTIR DE UN FLUJO DE ENTRADA
@@ -382,6 +389,4 @@ public class StudentController extends HttpServlet {
  	        }
  	     }
  	}
-	
-
 }

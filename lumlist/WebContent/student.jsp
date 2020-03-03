@@ -1,4 +1,3 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
@@ -75,7 +74,7 @@
                     <color class="grayFont">Nombre:</color> ${student.name}
                     <br> <color class="grayFont">Apellidos:</color> ${student.surname}
                     <br> <color class="grayFont">Fecha nacimiento:</color> ${newDate}
-                    <br> <color class="grayFont">Edad:</color> ${age} aÃ±os
+                    <br> <color class="grayFont">Edad:</color> ${age} años
                 </span>
                 <span class="titleData col100 lMarginTop">Estudios:</span>
                 <div id="studies" class="col100 mMarginTop contentInfo">
@@ -170,7 +169,7 @@
 	    	var id= ${student.id};
 	    	
 	    	$("#bRemoveStudent").on("click", function(){
-	    		var resp = confirm("Â¿Desea eliminar este alumno?");
+	    		var resp = confirm("¿Desea eliminar este alumno?");
 	    		if(resp){
 	    			window.location.href = "./student?action=remove&id="+id;
 	    		}

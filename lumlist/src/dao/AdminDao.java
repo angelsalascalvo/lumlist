@@ -10,24 +10,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.Admin;
 
-/**
- *
- * @author rutil
- */
+//Comunicaciones con la tabla administradores de la base de datos
+
 public class AdminDao {
     private DbConnection conn;
+    
+    //------------------------------------------------------------------------------------------
 
+    /**
+     * CONSTRUCTOR PARAMETRIZADO
+     * @param conn
+     */
     public AdminDao(DbConnection conn) {
         this.conn = conn;
     }
     
+    //------------------------------------------------------------------------------------------
+    
     /**
-     * Metodo para validar un usuario administrador en la base de datos
+     * METODO PARA VALIDAR UN USUARIO ADMINISTRADOR EN LA BASE DE DATOS (LOGUEARSE)
      * @param user Nombre de usuario
      * @param pass Contrasenna
      */
     public Admin login(String user, String pass) {
-
         try {
         	//Consulta SQL
             String sql = "select * from admin where username=? and passwd = ? limit 1";

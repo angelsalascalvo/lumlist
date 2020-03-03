@@ -6,17 +6,27 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.Course;
-
+//Comunicaciones con la tabla intermedia entre estudiantes y cursos de la base de datos
 public class StudentCourseDao {
 	private DbConnection conn;
 
+	//------------------------------------------------------------------------------------------
+	
+	/**
+	 * CONSTRUCTOR PARAMETRIZADO
+	 * @param conn
+	 */
     public StudentCourseDao(DbConnection conn) {
         this.conn = conn;
     }
     
-    //----------------------------------------------------------------
+    //------------------------------------------------------------------------------------------
     
+    /**
+     * METODO PARA AGREGAR UNA NUEVA ENTRADA EN LA BASE DE DATOS PARA RELACIONAR UN ALUMNO Y UN CURSO
+     * @param idS
+     * @param idC
+     */
     public void add(int idS, int idC) {
     	try {
    		 	 String sql = "insert into student_course (id_student, id_course) values (?,?)";
@@ -31,8 +41,12 @@ public class StudentCourseDao {
 		} 
     }
     
-    //----------------------------------------------------------------
+    //------------------------------------------------------------------------------------------
     
+    /**
+     * METODO PARA ELIMINAR TODAS LAS RELACIONES CON CURSOS DE UN DETERMINADO ALUMNO
+     * @param id ID del alumno
+     */
     public void removeAllStudent(int id) {
     	try {
    		 	 String sql = "delete from student_course where id_student=?";
@@ -47,11 +61,11 @@ public class StudentCourseDao {
     }
     
     
-    //----------------------------------------------------------------
+    //------------------------------------------------------------------------------------------
     
     /**
      * METODO PARA RECUPERAR UN LISTADO DE TODOS LOS CURSOS DE UN ALUMNO
-     * @param id
+     * @param id del alumno
      * @return
      */
     public List<Integer> getCoursesStudent(int id) {

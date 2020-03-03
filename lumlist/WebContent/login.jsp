@@ -1,4 +1,3 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <jsp:include page="head.jsp" />  
@@ -12,7 +11,7 @@
                     <div id="fieldsLogin" class="col30 xlMarginTop">
                         <form method="post" action="login">
                             <input class="col100" type="text" placeholder="Usuario" name="user">
-                            <input class="col100 sMarginTop" type="password" placeholder="ContraseÃ±a" name="pwd">
+                            <input class="col100 sMarginTop" type="password" placeholder="Contraseña" name="pwd">
                             <p class="errorText col100 sMarginTop">${error}</p>
                             <button class="col100 sMarginTop" type="submit">Acceder</button>
                             

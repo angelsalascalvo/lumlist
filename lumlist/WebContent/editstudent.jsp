@@ -1,4 +1,3 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
@@ -178,7 +177,7 @@
    	        //----------------------------------------------------------------------------------------------
 
    	        /**
-   	        * METODO PARA CARGAR LA PREVISUALIZACIÃ“N DE UNA IMAGEN SELECCIONADA PARA EL FORMULARIO
+   	        * METODO PARA CARGAR LA PREVISUALIZACIÓN DE UNA IMAGEN SELECCIONADA PARA EL FORMULARIO
    	        */
    	        function loadPreview(input) {
    	            if (input.files && input.files[0]) {
