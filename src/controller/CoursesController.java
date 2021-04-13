@@ -72,7 +72,7 @@ public class CoursesController extends HttpServlet {
 					conn = new DbConnection();
 					CourseDao courseDaoRemove = new CourseDao(conn);
 					courseDaoRemove.remove(idRemove);
-					//Recargar esta página
+					//Recargar esta pagina
 					resp.sendRedirect(req.getContextPath() + "/courses");
 				}else {
 					resp.sendRedirect(req.getContextPath() + "/login");
@@ -89,7 +89,7 @@ public class CoursesController extends HttpServlet {
 					 CourseDao courseDao = new CourseDao(conn);
 					 courseDao.update(sId, sName);
 					 
-					 //Recargar esta página
+					 //Recargar esta pagina
 					 resp.sendRedirect(req.getContextPath() + "/courses");
 				 }else {
 					resp.sendRedirect(req.getContextPath() + "/login");
@@ -107,7 +107,7 @@ public class CoursesController extends HttpServlet {
 					 CourseDao courseDaoInsert = new CourseDao(conn);
 					 courseDaoInsert.add(sNameAdd);
 					 conn.disconnect();
-					 //Recargar esta página
+					 //Recargar esta pagina
 					 resp.sendRedirect(req.getContextPath() + "/courses");
 				}else {
 					resp.sendRedirect(req.getContextPath() + "/login");

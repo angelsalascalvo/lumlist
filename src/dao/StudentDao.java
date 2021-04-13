@@ -141,7 +141,7 @@ public class StudentDao {
     //------------------------------------------------------------------------------------------
     
     /**
-     * METODO PARA ACTUALIZAR CONTRASEÑA DEL ALUMNO
+     * METODO PARA ACTUALIZAR CONTRASENNA DEL ALUMNO
      * @param passwd
      * @param id
      */
