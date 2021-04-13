@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost
--- Tiempo de generación: 03-03-2020 a las 16:39:03
--- Versión del servidor: 5.7.24
--- Versión de PHP: 7.2.19
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 13-04-2021 a las 00:38:49
+-- Versión del servidor: 10.4.18-MariaDB
+-- Versión de PHP: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -21,6 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `lumlist`
 --
+CREATE DATABASE lumlist;
 
 -- --------------------------------------------------------
 
@@ -34,6 +34,12 @@ CREATE TABLE `admin` (
   `passwd` varchar(50) CHARACTER SET latin1 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
+--
+-- Volcado de datos para la tabla `admin`
+--
+
+INSERT INTO `admin` (`id`, `username`, `passwd`) VALUES
+(1, 'admin', 'admin');
 
 -- --------------------------------------------------------
 
@@ -117,7 +123,7 @@ ALTER TABLE `student_course`
 -- AUTO_INCREMENT de la tabla `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `courses`
